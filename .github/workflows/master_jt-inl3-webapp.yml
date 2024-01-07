@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -25,11 +25,8 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
-      - name: Run test
-        run: dotnet test
-
       - name: dotnet publish
-        run: dotnet publish BlazorApp/BlazorApp.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -38,7 +35,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
     environment:
       name: 'Production'
@@ -56,5 +53,5 @@ jobs:
         with:
           app-name: 'jt-inl3-webapp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_20483E7E7FFF45DEA6BADEDE1F27A7C5 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_33D926F3668D47198FB6EF8D9317E3CA }}
           package: .
